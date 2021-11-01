@@ -11,18 +11,19 @@ const getById = async (id) => {
 };
 
 const create = async (account) => {
-  const newAccount = await db("accounts").insert(account);
+  const [id] = await db("accounts").insert(account);
+  const newAccount = await getById(id);
   return newAccount;
 };
 
 const updateById = async (id, account) => {
-  await db("accounts").update(account).where("id", id);
+  await db("accounts").update(account).where({ id });
   return await getById(id);
 };
 
 const deleteById = async (id) => {
   const deletedAccount = await getById(id);
-  await db("accounts").del().where("id", id);
+  await db("accounts").del().where({ id });
   return deletedAccount;
 };
 

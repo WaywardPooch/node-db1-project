@@ -33,7 +33,10 @@ router.post(
   async (req, res, next) => {
     try {
       const { name, budget } = req.body;
-      const newAccount = await Account.create({ name, budget });
+      const newAccount = await Account.create({
+        name: name.trim(),
+        budget,
+      });
       res.status(201).json(newAccount);
     } catch (err) {
       next(err);
@@ -59,7 +62,7 @@ router.put(
   }
 );
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", checkAccountId, async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedAccount = await Account.deleteById(id);
