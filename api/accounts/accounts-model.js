@@ -6,7 +6,7 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const account = await db("accounts").where("id", id);
+  const account = await db("accounts").where({ id }).first();
   return account;
 };
 
@@ -26,10 +26,16 @@ const deleteById = async (id) => {
   return deletedAccount;
 };
 
+const getByName = async (name) => {
+  const account = await db("accounts").where({ name });
+  return account;
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   updateById,
   deleteById,
+  getByName,
 };

@@ -42,9 +42,7 @@ router.post(
   }
 );
 
-router.put("/:id", (req, res, next) => {
-  // DO YOUR MAGIC
-});
+router.put("/:id", async (req, res, next) => {});
 
 router.delete("/:id", (req, res, next) => {
   // DO YOUR MAGIC
