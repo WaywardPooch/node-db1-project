@@ -54,15 +54,8 @@ const checkAccountId = async (req, res, next) => {
   }
 };
 
-const handleErrors = (err, req, res, next) => {
-  res.status(err.status || 500).json({
-    message: err.message,
-  });
-};
-
 module.exports = {
   checkAccountId,
   checkAccountNameUnique,
   checkAccountPayload,
-  handleErrors,
 };

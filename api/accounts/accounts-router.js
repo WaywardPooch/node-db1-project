@@ -2,7 +2,6 @@ const router = require("express").Router();
 const Account = require("./accounts-model");
 const {
   checkAccountId,
-  handleErrors,
   checkAccountPayload,
   checkAccountNameUnique,
 } = require("./accounts-middleware");
@@ -42,17 +41,39 @@ router.post(
   }
 );
 
-router.put("/:id", async (req, res, next) => {});
+router.put(
+  "/:id",
+  checkAccountId,
+  checkAccountPayload,
+  checkAccountNameUnique,
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { name, budget } = req.body;
+      const updatedInfo = { name: name.trim(), budget };
+      const updatedAccount = await Account.updateById(id, updatedInfo);
+      res.status(200).json(updatedAccount);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
-router.delete("/:id", (req, res, next) => {
-  // DO YOUR MAGIC
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedAccount = await Account.deleteById(id);
+    res.status(200).json(deletedAccount);
+  } catch (err) {
+    next(err);
+  }
 });
 
+// Error Handler
 router.use((err, req, res, next) => {
-  // eslint-disable-line
-  // DO YOUR MAGIC
+  res.status(err.status || 500).json({
+    message: err.message,
+  });
 });
-
-router.use(handleErrors);
 
 module.exports = router;
