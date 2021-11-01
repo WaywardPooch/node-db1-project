@@ -1,6 +1,11 @@
 const router = require("express").Router();
 const Account = require("./accounts-model");
-const { checkAccountId, handleErrors } = require("./accounts-middleware");
+const {
+  checkAccountId,
+  handleErrors,
+  checkAccountPayload,
+  checkAccountNameUnique,
+} = require("./accounts-middleware");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -11,13 +16,31 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", (req, res, next) => {
-  // DO YOUR MAGIC
+router.get("/:id", checkAccountId, async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const account = await Account.getById(id);
+    const { budget, name } = account;
+    res.status(200).json({ budget, name });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.post("/", (req, res, next) => {
-  // DO YOUR MAGIC
-});
+router.post(
+  "/",
+  checkAccountPayload,
+  checkAccountNameUnique,
+  async (req, res, next) => {
+    try {
+      const { name, budget } = req.body;
+      const newAccount = await Account.create({ name, budget });
+      res.status(201).json(newAccount);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 router.put("/:id", (req, res, next) => {
   // DO YOUR MAGIC
