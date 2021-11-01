@@ -28,7 +28,7 @@ const deleteById = async (id) => {
 };
 
 const getByName = async (name) => {
-  const account = await db("accounts").where({ name });
+  const account = await db("accounts").where({ name: name }).first();
   return account;
 };
 
