@@ -2,15 +2,10 @@ const Account = require("./accounts-model");
 
 const checkAccountPayload = (req, res, next) => {
   const { name, budget } = req.body;
-  if (!name || !budget) {
+  if (name === undefined || budget === undefined) {
     next({
       status: 400,
       message: "name and budget are required",
-    });
-  } else if (typeof budget !== "number") {
-    next({
-      status: 400,
-      message: "budget of account must be a number",
     });
   } else if (typeof name !== "string") {
     next({
@@ -21,6 +16,11 @@ const checkAccountPayload = (req, res, next) => {
     next({
       status: 400,
       message: "name of account must be between 3 and 100",
+    });
+  } else if (typeof budget !== "number") {
+    next({
+      status: 400,
+      message: "budget of account must be a number",
     });
   } else if (budget < 0 || budget > 1000000) {
     next({

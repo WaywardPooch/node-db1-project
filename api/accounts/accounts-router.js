@@ -73,6 +73,7 @@ router.delete("/:id", checkAccountId, async (req, res, next) => {
 });
 
 // Error Handler
+// eslint-disable-next-line
 router.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     message: err.message,
